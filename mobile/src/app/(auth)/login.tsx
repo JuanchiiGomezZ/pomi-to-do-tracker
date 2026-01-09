@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
 import { View } from "react-native";
 import { Button, TextInput, Text } from "@/shared/components/ui";
+import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
 
 export default function LoginScreen() {
   const {
@@ -33,7 +34,6 @@ export default function LoginScreen() {
         <Text variant="body" color="secondary">
           Sign in to continue
         </Text>
-
         <Controller
           control={control}
           name="email"

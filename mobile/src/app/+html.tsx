@@ -1,6 +1,7 @@
 import React from "react";
 import { ScrollViewStyleReset } from "expo-router/html";
 import { type PropsWithChildren } from "react";
+import "../shared/styles/unistyles";
 
 export default function Root({ children }: PropsWithChildren) {
   return (

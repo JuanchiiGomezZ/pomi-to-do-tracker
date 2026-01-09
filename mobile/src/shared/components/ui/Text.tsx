@@ -38,35 +38,44 @@ export function Text({
 
 const styles = StyleSheet.create((theme) => ({
   text: {
-    lineHeight: 1.4,
+    // lineHeight in RN must be absolute pixels, not multiplier
+    // It's set per variant below
   },
   variant_h1: {
     fontSize: theme.fontSize["3xl"],
+    lineHeight: theme.fontSize["3xl"] * 1.3,
     fontWeight: "bold",
   },
   variant_h2: {
     fontSize: theme.fontSize["2xl"],
+    lineHeight: theme.fontSize["2xl"] * 1.3,
     fontWeight: "bold",
   },
   variant_h3: {
     fontSize: theme.fontSize.xl,
+    lineHeight: theme.fontSize.xl * 1.3,
     fontWeight: "bold",
   },
   variant_h4: {
     fontSize: theme.fontSize.lg,
+    lineHeight: theme.fontSize.lg * 1.3,
     fontWeight: "bold",
   },
   variant_body: {
     fontSize: theme.fontSize.base,
+    lineHeight: theme.fontSize.base * 1.5,
   },
   variant_bodySmall: {
     fontSize: theme.fontSize.sm,
+    lineHeight: theme.fontSize.sm * 1.5,
   },
   variant_caption: {
     fontSize: theme.fontSize.xs,
+    lineHeight: theme.fontSize.xs * 1.5,
   },
   variant_overline: {
     fontSize: 10,
+    lineHeight: 14,
     fontWeight: "500",
   },
   color_primary: {
