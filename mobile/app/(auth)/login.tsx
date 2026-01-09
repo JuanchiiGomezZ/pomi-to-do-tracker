@@ -1,12 +1,14 @@
-'use client';
-
-import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { useAuth, GuestRoute } from '@/features/auth';
+import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useForm, useAuth, GuestRoute } from '@/features/auth';
+import { loginSchema, type LoginFormData } from '@/features/auth/schemas/auth.schema';
+import { Controller } from 'react-hook-form';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ schema: loginSchema });
 
   const {
     login,
@@ -14,14 +16,9 @@ export default function LoginScreen() {
     loginError,
   } = useAuth();
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
-
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      await login({ email, password });
+      await login(data);
     } catch {
       // Error is handled by the hook
     }
@@ -33,33 +30,49 @@ export default function LoginScreen() {
         <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>Sign in to continue</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          placeholderTextColor="#999"
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.email && styles.inputError]}
+              placeholder="Email"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholderTextColor="#999"
+            />
+          )}
         />
+        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          placeholderTextColor="#999"
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.password && styles.inputError]}
+              placeholder="Password"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              secureTextEntry
+              placeholderTextColor="#999"
+            />
+          )}
         />
+        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
         {loginError && (
-          <Text style={styles.error}>{loginError.message}</Text>
+          <Text style={styles.errorText}>{loginError.message}</Text>
         )}
 
         {isLoggingIn ? (
           <ActivityIndicator size="large" color="#007AFF" />
         ) : (
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
         )}
@@ -69,7 +82,7 @@ export default function LoginScreen() {
           onPress={() => router.push('/(auth)/register')}
         >
           <Text style={styles.linkText}>
-            Don't have an account? <Text style={styles.linkTextBold}>Sign Up</Text>
+            Dont have an account? <Text style={styles.linkTextBold}>Sign Up</Text>
           </Text>
         </TouchableOpacity>
       </View>
@@ -104,14 +117,17 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 4,
     fontSize: 16,
     backgroundColor: '#f8f8f8',
   },
-  error: {
+  inputError: {
+    borderColor: '#ff3b30',
+  },
+  errorText: {
     color: '#ff3b30',
-    marginBottom: 16,
-    textAlign: 'center',
+    marginBottom: 12,
+    marginLeft: 4,
     fontSize: 14,
   },
   button: {

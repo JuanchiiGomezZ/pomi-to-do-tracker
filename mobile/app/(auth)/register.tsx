@@ -1,15 +1,15 @@
-'use client';
-
-import { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { useAuth, GuestRoute } from '@/features/auth';
+import { View, Text, TextInput, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useForm, useAuth, GuestRoute } from '@/features/auth';
+import { registerSchema, type RegisterFormData } from '@/features/auth/schemas/auth.schema';
+import { Controller } from 'react-hook-form';
 import { router } from 'expo-router';
 
 export default function RegisterScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ schema: registerSchema });
 
   const {
     register,
@@ -17,19 +17,9 @@ export default function RegisterScreen() {
     registerError,
   } = useAuth();
 
-  const handleRegister = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Email and password are required');
-      return;
-    }
-
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      await register({
-        email,
-        password,
-        firstName: firstName || undefined,
-        lastName: lastName || undefined,
-      });
+      await register(data);
     } catch {
       // Error is handled by the hook
     }
@@ -42,57 +32,86 @@ export default function RegisterScreen() {
         <Text style={styles.subtitle}>Sign up to get started</Text>
 
         <View style={styles.row}>
-          <TextInput
-            style={[styles.input, styles.halfInput]}
-            placeholder="First Name"
-            value={firstName}
-            onChangeText={setFirstName}
-            placeholderTextColor="#999"
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={[styles.input, styles.halfInput]}
+                placeholder="First Name"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholderTextColor="#999"
+              />
+            )}
           />
-
-          <TextInput
-            style={[styles.input, styles.halfInput]}
-            placeholder="Last Name"
-            value={lastName}
-            onChangeText={setLastName}
-            placeholderTextColor="#999"
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={[styles.input, styles.halfInput]}
+                placeholder="Last Name"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholderTextColor="#999"
+              />
+            )}
           />
         </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          placeholderTextColor="#999"
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.email && styles.inputError]}
+              placeholder="Email"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholderTextColor="#999"
+            />
+          )}
         />
+        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          placeholderTextColor="#999"
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.password && styles.inputError]}
+              placeholder="Password"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              secureTextEntry
+              placeholderTextColor="#999"
+            />
+          )}
         />
+        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
         {registerError && (
-          <Text style={styles.error}>{registerError.message}</Text>
+          <Text style={styles.errorText}>{registerError.message}</Text>
         )}
 
         {isRegistering ? (
           <ActivityIndicator size="large" color="#007AFF" />
         ) : (
-          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
             <Text style={styles.buttonText}>Create Account</Text>
           </TouchableOpacity>
         )}
 
         <TouchableOpacity
           style={styles.linkButton}
-          onPress={() => router.replace('/(auth)/login')}
+          onPress={() => router.replace('/(auth)/login' as const)}
         >
           <Text style={styles.linkText}>
             Already have an account? <Text style={styles.linkTextBold}>Sign In</Text>
@@ -132,17 +151,20 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 4,
     fontSize: 16,
     backgroundColor: '#f8f8f8',
   },
   halfInput: {
     flex: 1,
   },
-  error: {
+  inputError: {
+    borderColor: '#ff3b30',
+  },
+  errorText: {
     color: '#ff3b30',
-    marginBottom: 16,
-    textAlign: 'center',
+    marginBottom: 12,
+    marginLeft: 4,
     fontSize: 14,
   },
   button: {
