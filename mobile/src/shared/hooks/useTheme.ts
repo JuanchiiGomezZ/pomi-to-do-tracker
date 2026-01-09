@@ -1,9 +1,24 @@
+import { useCallback, useEffect, useState } from "react";
 import { useUnistyles, UnistylesRuntime } from "react-native-unistyles";
+import { preferences } from "@/shared/utils";
 
 export type ThemeMode = "light" | "dark" | "system";
 
 export function useTheme() {
   const { theme, rt } = useUnistyles();
+  const [savedMode, setSavedMode] = useState<ThemeMode | null>(null);
+
+  // Load saved theme preference on mount
+  useEffect(() => {
+    const saved = preferences.getTheme();
+    setSavedMode(saved);
+
+    // Apply saved preference if exists
+    if (saved && saved !== "system") {
+      UnistylesRuntime.setAdaptiveThemes(false);
+      UnistylesRuntime.setTheme(saved);
+    }
+  }, []);
 
   /**
    * Get current theme mode
@@ -21,24 +36,28 @@ export function useTheme() {
    * Set theme mode
    * @param mode - 'light', 'dark', or 'system'
    */
-  const setThemeMode = (mode: ThemeMode) => {
+  const setThemeMode = useCallback((mode: ThemeMode) => {
+    setSavedMode(mode);
+
     if (mode === "system") {
       // Enable adaptive themes (follows system)
       UnistylesRuntime.setAdaptiveThemes(true);
+      preferences.removeTheme();
     } else {
       // Disable adaptive themes and set manual theme
       if (rt.hasAdaptiveThemes) {
         UnistylesRuntime.setAdaptiveThemes(false);
       }
       UnistylesRuntime.setTheme(mode);
+      preferences.setTheme(mode);
     }
-  };
+  }, [rt.hasAdaptiveThemes]);
 
   /**
    * Toggle between light and dark
    * If system mode is active, switches to manual mode first
    */
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const currentTheme = rt.themeName as "light" | "dark";
     const newTheme = currentTheme === "light" ? "dark" : "light";
 
@@ -48,7 +67,9 @@ export function useTheme() {
     }
 
     UnistylesRuntime.setTheme(newTheme);
-  };
+    preferences.setTheme(newTheme);
+    setSavedMode(newTheme);
+  }, [rt.themeName, rt.hasAdaptiveThemes]);
 
   return {
     // Current theme object with colors, spacing, etc.
@@ -60,8 +81,14 @@ export function useTheme() {
     // Current mode ('light' | 'dark' | 'system')
     mode: getCurrentMode(),
 
+    // Saved mode from storage (null if never set)
+    savedMode: savedMode as ThemeMode | null,
+
     // Whether adaptive themes (system) is enabled
     isSystemMode: rt.hasAdaptiveThemes,
+
+    // Is dark mode currently active?
+    isDark: rt.themeName === "dark",
 
     // Actions
     setThemeMode,
