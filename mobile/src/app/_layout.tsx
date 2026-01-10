@@ -5,6 +5,7 @@ import Providers from "./providers";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useFonts } from "expo-font";
+import { Toast } from "@shared/components/ui/Toast";
 import {
   Poppins_100Thin,
   Poppins_200ExtraLight,
@@ -60,6 +61,7 @@ export default function RootLayout() {
             <Stack.Screen name="(tool)" />
           </Stack>
           <StatusBar style="auto" />
+          <Toast />
         </Providers>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

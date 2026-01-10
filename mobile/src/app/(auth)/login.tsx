@@ -15,6 +15,7 @@ import {
   BottomSheet,
   ConfirmationSheet,
   List,
+  toast,
 } from "@/shared/components/ui";
 import { useTranslation } from "react-i18next";
 import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
@@ -85,7 +86,12 @@ export default function LoginScreen() {
 
         <Button
           title={t("login.button")}
-          onPress={handleSubmit(onSubmit)}
+          onPress={() => {
+            toast.success({
+              title: "toast.success_generic",
+              message: "toast.saved",
+            });
+          }}
           loading={isLoggingIn}
         />
 
@@ -101,23 +107,6 @@ export default function LoginScreen() {
             {t("login.sign_up")}
           </Text>
         </View>
-        <List
-          data={[]}
-          errorState={{
-            title: "Error",
-            message: "Error",
-            onRetry: () => {},
-          }}
-          emptyState={{
-            title: "No hay tareas",
-            icon: "abacus",
-            variant: "primary",
-            description: "No hay tareas",
-            actionLabel: "Agregar tarea",
-            onAction: () => {},
-          }}
-          renderItem={() => <Text>Item</Text>}
-        />
       </ScreenWrapper>
     </GuestRoute>
   );
