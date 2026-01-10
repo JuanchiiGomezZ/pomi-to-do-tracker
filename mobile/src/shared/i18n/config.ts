@@ -51,7 +51,7 @@ i18n
       useSuspense: false, // Importante: evita problemas en React Native
     },
 
-    compatibilityJSON: "v3", // Importante: compatibilidad con Android
+    compatibilityJSON: "v4", // Formato JSON estándar, compatible con Android
 
     // Debug solo en desarrollo
     debug: __DEV__,

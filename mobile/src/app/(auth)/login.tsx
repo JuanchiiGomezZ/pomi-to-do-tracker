@@ -14,6 +14,7 @@ import {
   ScreenWrapper,
   BottomSheet,
   ConfirmationSheet,
+  List,
 } from "@/shared/components/ui";
 import { useTranslation } from "react-i18next";
 import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
@@ -82,14 +83,11 @@ export default function LoginScreen() {
           </Text>
         )}
 
-        <View style={styles.buttonContainer}>
-          <Button
-            title={t("login.button")}
-            onPress={handleSubmit(onSubmit)}
-            loading={isLoggingIn}
-            style={styles.button}
-          />
-        </View>
+        <Button
+          title={t("login.button")}
+          onPress={handleSubmit(onSubmit)}
+          loading={isLoggingIn}
+        />
 
         <View style={styles.linkContainer}>
           <Text variant="body" color="primary">
@@ -103,14 +101,22 @@ export default function LoginScreen() {
             {t("login.sign_up")}
           </Text>
         </View>
-        <ConfirmationSheet
-          isOpen={true}
-          onClose={() => false}
-          title="¿Eliminar elemento?"
-          description="Esta acción no se puede deshacer."
-          variant="default"
-          confirmText="Eliminar"
-          onConfirm={() => {}}
+        <List
+          data={[]}
+          errorState={{
+            title: "Error",
+            message: "Error",
+            onRetry: () => {},
+          }}
+          emptyState={{
+            title: "No hay tareas",
+            icon: "abacus",
+            variant: "primary",
+            description: "No hay tareas",
+            actionLabel: "Agregar tarea",
+            onAction: () => {},
+          }}
+          renderItem={() => <Text>Item</Text>}
         />
       </ScreenWrapper>
     </GuestRoute>

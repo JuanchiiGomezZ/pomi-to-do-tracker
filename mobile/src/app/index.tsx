@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { router } from "expo-router";
+import { router, useRootNavigationState } from "expo-router";
 import {
   useAuthStore,
   selectIsAuthenticated,
@@ -9,8 +9,12 @@ import { ScreenWrapper } from "@/shared/components/ui";
 export default function Index() {
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const isLoading = useAuthStore((state) => state.isLoading);
+  const rootNavigationState = useRootNavigationState();
 
   useEffect(() => {
+    // Wait for navigation to be ready before redirecting
+    if (!rootNavigationState?.key) return;
+
     // Redirect based on auth state after loading
     if (!isLoading) {
       if (isAuthenticated) {
@@ -19,7 +23,7 @@ export default function Index() {
         router.replace("/(auth)/login");
       }
     }
-  }, [isLoading, isAuthenticated]);
+  }, [isLoading, isAuthenticated, rootNavigationState?.key]);
 
   return <ScreenWrapper loading centered />;
 }

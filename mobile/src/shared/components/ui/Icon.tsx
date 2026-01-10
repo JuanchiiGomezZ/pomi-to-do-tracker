@@ -7,7 +7,7 @@ type MaterialCommunityIconsProps = ComponentProps<
 >;
 export type IconName = MaterialCommunityIconsProps["name"];
 
-type IconColor =
+export type IconColor =
   | "text"
   | "primary"
   | "muted"
@@ -24,6 +24,8 @@ interface IconProps
   extends Omit<MaterialCommunityIconsProps, "color" | "size"> {
   color?: IconColor;
   size?: IconSize;
+  /** Adds a rounded background with the same color at 15% opacity */
+  withBackground?: boolean;
 }
 
 const getColorValue = (
@@ -55,12 +57,44 @@ const getColorValue = (
   return colorMap[color];
 };
 
-export function Icon({ color = "text", size = "md", ...props }: IconProps) {
+/** Converts a hex color to rgba with given opacity */
+const hexToRgba = (hex: string, opacity: number): string => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return hex;
+
+  const r = parseInt(result[1], 16);
+  const g = parseInt(result[2], 16);
+  const b = parseInt(result[3], 16);
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
+export function Icon({
+  color = "text",
+  size = "md",
+  withBackground = false,
+  ...props
+}: IconProps) {
   const { theme } = useUnistyles();
   const colorValue = getColorValue(color, theme.colors);
   const sizeValue = theme.iconSizes[size];
 
+  const padding = withBackground ? sizeValue * 0.35 : 0;
+
   return (
-    <MaterialCommunityIcons color={colorValue} size={sizeValue} {...props} />
+    <MaterialCommunityIcons
+      color={colorValue}
+      size={sizeValue}
+      style={
+        withBackground
+          ? {
+              backgroundColor: hexToRgba(colorValue, 0.15),
+              borderRadius: (sizeValue + padding * 2) / 2,
+              padding,
+            }
+          : undefined
+      }
+      {...props}
+    />
   );
 }
