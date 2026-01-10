@@ -1,7 +1,10 @@
-import { useEffect } from 'react';
-import { router } from 'expo-router';
-import { useAuthStore, selectIsAuthenticated } from '@/features/auth/stores/auth.store';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { useEffect } from "react";
+import { router } from "expo-router";
+import {
+  useAuthStore,
+  selectIsAuthenticated,
+} from "@/features/auth/stores/auth.store";
+import { ScreenWrapper } from "@/shared/components/ui";
 
 export default function Index() {
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
@@ -11,25 +14,12 @@ export default function Index() {
     // Redirect based on auth state after loading
     if (!isLoading) {
       if (isAuthenticated) {
-        router.replace('/(tool)/dashboard');
+        router.replace("/(tool)/dashboard");
       } else {
-        router.replace('/(auth)/login');
+        router.replace("/(auth)/login");
       }
     }
   }, [isLoading, isAuthenticated]);
 
-  return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color="#007AFF" />
-    </View>
-  );
+  return <ScreenWrapper loading centered />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-});

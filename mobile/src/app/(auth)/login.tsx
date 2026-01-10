@@ -7,8 +7,7 @@ import { Controller } from "react-hook-form";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
 import { View } from "react-native";
-import { Button, TextInput, Text } from "@/shared/components/ui";
-import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
+import { Button, TextInput, Text, ScreenWrapper } from "@/shared/components/ui";
 import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
@@ -31,7 +30,7 @@ export default function LoginScreen() {
 
   return (
     <GuestRoute>
-      <View style={styles.container}>
+      <ScreenWrapper centered={{ y: true }}>
         <Text variant="h1">{t("login.title")}</Text>
         <Text variant="body" color="secondary">
           {t("login.subtitle")}
@@ -96,18 +95,12 @@ export default function LoginScreen() {
             {t("login.sign_up")}
           </Text>
         </View>
-      </View>
+      </ScreenWrapper>
     </GuestRoute>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: theme.spacing(6), // 24px
-    backgroundColor: theme.colors.background,
-  },
   buttonContainer: {
     marginTop: theme.spacing(2), // 8px
   },

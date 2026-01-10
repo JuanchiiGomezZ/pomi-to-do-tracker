@@ -54,6 +54,39 @@ export const lightTheme = {
     "2xl": 24,
     "3xl": 30,
   },
+
+  fontFamily: {
+    thin: "Poppins-Thin",
+    extralight: "Poppins-ExtraLight",
+    light: "Poppins-Light",
+    regular: "Poppins-Regular",
+    medium: "Poppins-Medium",
+    semibold: "Poppins-SemiBold",
+    bold: "Poppins-Bold",
+    extrabold: "Poppins-ExtraBold",
+    black: "Poppins-Black",
+  },
+
+  fontWeight: {
+    thin: "100",
+    extralight: "200",
+    light: "300",
+    regular: "400",
+    medium: "500",
+    semibold: "600",
+    bold: "700",
+    extrabold: "800",
+    black: "900",
+  },
+
+  iconSizes: {
+    xs: 16,
+    sm: 20,
+    md: 24,
+    lg: 32,
+    xl: 40,
+    "2xl": 48,
+  },
 } as const;
 
 export const darkTheme = {
@@ -108,6 +141,39 @@ export const darkTheme = {
     xl: 20,
     "2xl": 24,
     "3xl": 30,
+  },
+
+  fontFamily: {
+    thin: "Poppins-Thin",
+    extralight: "Poppins-ExtraLight",
+    light: "Poppins-Light",
+    regular: "Poppins-Regular",
+    medium: "Poppins-Medium",
+    semibold: "Poppins-SemiBold",
+    bold: "Poppins-Bold",
+    extrabold: "Poppins-ExtraBold",
+    black: "Poppins-Black",
+  },
+
+  iconSizes: {
+    xs: 16,
+    sm: 20,
+    md: 24,
+    lg: 32,
+    xl: 40,
+    "2xl": 48,
+  },
+
+  fontWeight: {
+    thin: "100",
+    extralight: "200",
+    light: "300",
+    regular: "400",
+    medium: "500",
+    semibold: "600",
+    bold: "700",
+    extrabold: "800",
+    black: "900",
   },
 } as const;
 
