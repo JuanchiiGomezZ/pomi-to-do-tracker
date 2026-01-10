@@ -5,6 +5,7 @@ import { useUnistyles } from "react-native-unistyles";
 type MaterialCommunityIconsProps = ComponentProps<
   typeof MaterialCommunityIcons
 >;
+export type IconName = MaterialCommunityIconsProps["name"];
 
 type IconColor =
   | "text"

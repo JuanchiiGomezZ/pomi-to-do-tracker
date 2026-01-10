@@ -7,8 +7,16 @@ import { Controller } from "react-hook-form";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
 import { View } from "react-native";
-import { Button, TextInput, Text, ScreenWrapper } from "@/shared/components/ui";
+import {
+  Button,
+  TextInput,
+  Text,
+  ScreenWrapper,
+  BottomSheet,
+  ConfirmationSheet,
+} from "@/shared/components/ui";
 import { useTranslation } from "react-i18next";
+import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
 
 export default function LoginScreen() {
   const { t } = useTranslation("auth");
@@ -95,6 +103,15 @@ export default function LoginScreen() {
             {t("login.sign_up")}
           </Text>
         </View>
+        <ConfirmationSheet
+          isOpen={true}
+          onClose={() => false}
+          title="¿Eliminar elemento?"
+          description="Esta acción no se puede deshacer."
+          variant="default"
+          confirmText="Eliminar"
+          onConfirm={() => {}}
+        />
       </ScreenWrapper>
     </GuestRoute>
   );

@@ -1,7 +1,7 @@
 import { View, Pressable } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Text } from "./ui/Text";
-import { useTheme, type ThemeMode } from "@shared/hooks";
+import { useTheme } from "@shared/hooks";
 
 interface ThemeSwitcherProps {
   variant?: "toggle" | "selector";
@@ -23,7 +23,11 @@ export function ThemeSwitcher({ variant = "selector" }: ThemeSwitcherProps) {
     return (
       <Pressable style={styles.toggleButton} onPress={toggleTheme}>
         <Text variant="body">
-          {mode === "system" ? "🌓 System" : mode === "light" ? "☀️ Light" : "🌙 Dark"}
+          {mode === "system"
+            ? "🌓 System"
+            : mode === "light"
+            ? "☀️ Light"
+            : "🌙 Dark"}
         </Text>
       </Pressable>
     );
@@ -68,7 +72,12 @@ interface ThemeOptionProps {
   onPress: () => void;
 }
 
-function ThemeOption({ label, description, isSelected, onPress }: ThemeOptionProps) {
+function ThemeOption({
+  label,
+  description,
+  isSelected,
+  onPress,
+}: ThemeOptionProps) {
   return (
     <Pressable
       style={[styles.option, isSelected && styles.optionSelected]}

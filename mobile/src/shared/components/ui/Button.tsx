@@ -2,7 +2,12 @@ import { StyleSheet } from "react-native-unistyles";
 import { Pressable, Text, ActivityIndicator } from "react-native";
 import type { ViewStyle } from "react-native";
 
-type ButtonVariant = "primary" | "secondary" | "ghost";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "outline"
+  | "destructive";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
@@ -24,6 +29,11 @@ export function Button({
   disabled = false,
   style,
 }: ButtonProps) {
+  const getIndicatorColor = () => {
+    if (variant === "ghost" || variant === "outline") return "#007AFF";
+    return "#FFFFFF";
+  };
+
   return (
     <Pressable
       style={[
@@ -39,9 +49,15 @@ export function Button({
       accessibilityLabel={title}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={variant === "ghost" ? "#007AFF" : "#FFFFFF"} />
+        <ActivityIndicator size="small" color={getIndicatorColor()} />
       ) : (
-        <Text style={[styles.text, styles[`text_${variant}`], styles[`text_${size}`]]}>
+        <Text
+          style={[
+            styles.text,
+            styles[`text_${variant}`],
+            styles[`text_${size}`],
+          ]}
+        >
           {title}
         </Text>
       )}
@@ -66,6 +82,14 @@ const styles = StyleSheet.create((theme) => ({
   button_ghost: {
     backgroundColor: "transparent",
   },
+  button_outline: {
+    backgroundColor: "transparent",
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+  },
+  button_destructive: {
+    backgroundColor: theme.colors.error,
+  },
   button_sm: {
     height: 36,
   },
@@ -76,7 +100,7 @@ const styles = StyleSheet.create((theme) => ({
     height: 56,
   },
   text: {
-    fontWeight: "600",
+    fontFamily: theme.fontFamily.semibold,
   },
   text_primary: {
     color: theme.colors.text.inverse,
@@ -86,6 +110,12 @@ const styles = StyleSheet.create((theme) => ({
   },
   text_ghost: {
     color: theme.colors.primary,
+  },
+  text_outline: {
+    color: theme.colors.text.primary,
+  },
+  text_destructive: {
+    color: theme.colors.text.inverse,
   },
   text_sm: {
     fontSize: theme.fontSize.sm,

@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Providers from "./providers";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useFonts } from "expo-font";
 import {
   Poppins_100Thin,
@@ -17,10 +18,12 @@ import {
 } from "@expo-google-fonts/poppins";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { useTheme } from "@shared/hooks";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useTheme();
   const [fontsLoaded] = useFonts({
     "Poppins-Thin": Poppins_100Thin,
     "Poppins-ExtraLight": Poppins_200ExtraLight,
@@ -45,17 +48,19 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Providers>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tool)" />
-        </Stack>
-        <StatusBar style="auto" />
-      </Providers>
+      <BottomSheetModalProvider>
+        <Providers>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tool)" />
+          </Stack>
+          <StatusBar style="auto" />
+        </Providers>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 }
