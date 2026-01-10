@@ -2,8 +2,10 @@
 
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { useCurrentUser, ProtectedRoute } from '@/features/auth';
+import { useTranslation } from 'react-i18next';
 
 function DashboardContent() {
+  const { t } = useTranslation('dashboard');
   const { data: user, isLoading } = useCurrentUser();
 
   if (isLoading) {
@@ -17,32 +19,32 @@ function DashboardContent() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>Hello,</Text>
+        <Text style={styles.greeting}>{t('hello')}</Text>
         <Text style={styles.title}>{user?.firstName || user?.email}</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Stats</Text>
+        <Text style={styles.sectionTitle}>{t('stats.title')}</Text>
         <View style={styles.statsGrid}>
           <View style={[styles.statCard, styles.statCardBlue]}>
             <Text style={styles.statValue}>0</Text>
-            <Text style={styles.statLabel}>Tasks</Text>
+            <Text style={styles.statLabel}>{t('stats.total')}</Text>
           </View>
           <View style={[styles.statCard, styles.statCardGreen]}>
             <Text style={styles.statValue}>0</Text>
-            <Text style={styles.statLabel}>Completed</Text>
+            <Text style={styles.statLabel}>{t('stats.completed')}</Text>
           </View>
           <View style={[styles.statCard, styles.statCardOrange]}>
             <Text style={styles.statValue}>0</Text>
-            <Text style={styles.statLabel}>Pomodoro</Text>
+            <Text style={styles.statLabel}>{t('pomodoro')}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Recent Activity</Text>
+        <Text style={styles.sectionTitle}>{t('recent_activity')}</Text>
         <View style={styles.emptyState}>
-          <Text style={styles.emptyStateText}>No recent activity</Text>
+          <Text style={styles.emptyStateText}>{t('no_recent_activity')}</Text>
         </View>
       </View>
     </ScrollView>

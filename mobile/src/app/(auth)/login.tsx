@@ -9,8 +9,10 @@ import { StyleSheet } from "react-native-unistyles";
 import { View } from "react-native";
 import { Button, TextInput, Text } from "@/shared/components/ui";
 import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
+  const { t } = useTranslation("auth");
   const {
     control,
     handleSubmit,
@@ -30,22 +32,22 @@ export default function LoginScreen() {
   return (
     <GuestRoute>
       <View style={styles.container}>
-        <Text variant="h1">Welcome Back</Text>
+        <Text variant="h1">{t("login.title")}</Text>
         <Text variant="body" color="secondary">
-          Sign in to continue
+          {t("login.subtitle")}
         </Text>
         <Controller
           control={control}
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              label="Email"
+              label={t("labels.email")}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
               autoCapitalize="none"
               keyboardType="email-address"
-              placeholder="Enter your email"
+              placeholder={t("login.email_placeholder")}
               error={errors.email?.message}
             />
           )}
@@ -56,12 +58,12 @@ export default function LoginScreen() {
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              label="Password"
+              label={t("labels.password")}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
               secureTextEntry
-              placeholder="Enter your password"
+              placeholder={t("login.password_placeholder")}
               error={errors.password?.message}
             />
           )}
@@ -75,7 +77,7 @@ export default function LoginScreen() {
 
         <View style={styles.buttonContainer}>
           <Button
-            title="Sign In"
+            title={t("login.button")}
             onPress={handleSubmit(onSubmit)}
             loading={isLoggingIn}
             style={styles.button}
@@ -84,14 +86,14 @@ export default function LoginScreen() {
 
         <View style={styles.linkContainer}>
           <Text variant="body" color="primary">
-            Dont have an account?{" "}
+            {t("login.no_account")}{" "}
           </Text>
           <Text
             variant="body"
             color="primary"
             onPress={() => router.push("/(auth)/register")}
           >
-            Sign Up
+            {t("login.sign_up")}
           </Text>
         </View>
       </View>

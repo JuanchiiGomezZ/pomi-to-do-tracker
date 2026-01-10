@@ -5,5 +5,6 @@ export const STORAGE_KEYS = {
   REFRESH_TOKEN: 'refresh_token',
   USER: 'user',
   THEME: 'app_theme',
+  LANGUAGE: 'language',
   ONBOARDING_COMPLETED: 'onboarding_completed',
 } as const;

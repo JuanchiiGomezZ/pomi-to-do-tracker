@@ -2,18 +2,26 @@
 
 import { View, Text, StyleSheet } from 'react-native';
 import { useCurrentUser } from '@/features/auth';
+import { LanguageSwitcher } from '@shared/components/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 export default function SettingsScreen() {
+  const { t } = useTranslation('settings');
   const { data: user } = useCurrentUser();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.title}>{t('title')}</Text>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account</Text>
-        <Text style={styles.item}>Email: {user?.email}</Text>
+        <Text style={styles.sectionTitle}>{t('sections.account')}</Text>
+        <Text style={styles.item}>{t('account.email')}: {user?.email}</Text>
         <Text style={styles.item}>Role: {user?.role}</Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t('sections.preferences')}</Text>
+        <LanguageSwitcher variant="selector" />
       </View>
     </View>
   );

@@ -1,3 +1,4 @@
+import "@shared/i18n"; // Inicializar i18next
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '@/features/auth/stores/auth.store';

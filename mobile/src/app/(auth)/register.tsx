@@ -3,8 +3,10 @@ import { useForm, useAuth, GuestRoute } from '@/features/auth';
 import { registerSchema, type RegisterFormData } from '@/features/auth/schemas/auth.schema';
 import { Controller } from 'react-hook-form';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 export default function RegisterScreen() {
+  const { t } = useTranslation('auth');
   const {
     control,
     handleSubmit,
@@ -28,8 +30,8 @@ export default function RegisterScreen() {
   return (
     <GuestRoute>
       <View style={styles.container}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Sign up to get started</Text>
+        <Text style={styles.title}>{t('register.title')}</Text>
+        <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
 
         <View style={styles.row}>
           <Controller
@@ -38,7 +40,7 @@ export default function RegisterScreen() {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, styles.halfInput]}
-                placeholder="First Name"
+                placeholder={t('register.first_name_placeholder')}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -52,7 +54,7 @@ export default function RegisterScreen() {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, styles.halfInput]}
-                placeholder="Last Name"
+                placeholder={t('register.last_name_placeholder')}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -68,7 +70,7 @@ export default function RegisterScreen() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={[styles.input, errors.email && styles.inputError]}
-              placeholder="Email"
+              placeholder={t('login.email_placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -86,7 +88,7 @@ export default function RegisterScreen() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={[styles.input, errors.password && styles.inputError]}
-              placeholder="Password"
+              placeholder={t('login.password_placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -105,7 +107,7 @@ export default function RegisterScreen() {
           <ActivityIndicator size="large" color="#007AFF" />
         ) : (
           <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.buttonText}>Create Account</Text>
+            <Text style={styles.buttonText}>{t('register.button')}</Text>
           </TouchableOpacity>
         )}
 
@@ -114,7 +116,7 @@ export default function RegisterScreen() {
           onPress={() => router.replace('/(auth)/login' as const)}
         >
           <Text style={styles.linkText}>
-            Already have an account? <Text style={styles.linkTextBold}>Sign In</Text>
+            {t('register.have_account')} <Text style={styles.linkTextBold}>{t('register.sign_in')}</Text>
           </Text>
         </TouchableOpacity>
       </View>
