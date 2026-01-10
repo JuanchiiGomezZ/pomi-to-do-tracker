@@ -1,24 +1,11 @@
 import { useForm, useAuth, GuestRoute } from "@/features/auth";
-import {
-  loginSchema,
-  type LoginFormData,
-} from "@/features/auth/schemas/auth.schema";
+import { loginSchema, type LoginFormData } from "@/features/auth/schemas/auth.schema";
 import { Controller } from "react-hook-form";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
 import { View } from "react-native";
-import {
-  Button,
-  TextInput,
-  Text,
-  ScreenWrapper,
-  BottomSheet,
-  ConfirmationSheet,
-  List,
-  toast,
-} from "@/shared/components/ui";
+import { Button, TextInput, Text, ScreenWrapper } from "@/shared/components/ui";
 import { useTranslation } from "react-i18next";
-import { ThemeSwitcher } from "@/shared/components/ThemeSwitcher";
 
 export default function LoginScreen() {
   const { t } = useTranslation("auth");
@@ -84,26 +71,13 @@ export default function LoginScreen() {
           </Text>
         )}
 
-        <Button
-          title={t("login.button")}
-          onPress={() => {
-            toast.success({
-              title: "toast.success_generic",
-              message: "toast.saved",
-            });
-          }}
-          loading={isLoggingIn}
-        />
+        <Button title={t("login.button")} onPress={handleSubmit(onSubmit)} loading={isLoggingIn} />
 
         <View style={styles.linkContainer}>
           <Text variant="body" color="primary">
             {t("login.no_account")}{" "}
           </Text>
-          <Text
-            variant="body"
-            color="primary"
-            onPress={() => router.push("/(auth)/register")}
-          >
+          <Text variant="body" color="primary" onPress={() => router.push("/(auth)/register")}>
             {t("login.sign_up")}
           </Text>
         </View>

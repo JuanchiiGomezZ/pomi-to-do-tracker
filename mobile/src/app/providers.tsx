@@ -5,6 +5,8 @@ import { useAuthStore } from '@/features/auth/stores/auth.store';
 import * as SecureStore from 'expo-secure-store';
 import { STORAGE_KEYS } from '@/constants';
 import type { User } from '@/features/auth/types/auth.types';
+import { UnistylesRuntime } from 'react-native-unistyles';
+import { preferences } from '@/shared/utils';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +17,21 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Theme Initializer - Aplica el tema guardado lo antes posible
+function ThemeInitializer({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    const savedTheme = preferences.getTheme();
+
+    if (savedTheme && savedTheme !== 'system') {
+      // Desactivar adaptive themes y aplicar tema manual
+      UnistylesRuntime.setAdaptiveThemes(false);
+      UnistylesRuntime.setTheme(savedTheme);
+    }
+  }, []);
+
+  return <>{children}</>;
+}
 
 // Hook simple para inicializar auth desde storage
 function useInitializeAuth() {
@@ -52,7 +69,9 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthInitializer>{children}</AuthInitializer>
+      <ThemeInitializer>
+        <AuthInitializer>{children}</AuthInitializer>
+      </ThemeInitializer>
     </QueryClientProvider>
   );
 }

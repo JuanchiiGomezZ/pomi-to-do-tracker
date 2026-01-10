@@ -1,16 +1,8 @@
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { Text as RNText } from "react-native";
-import type { TextStyle } from "react-native";
+import type { TextStyle, StyleProp } from "react-native";
 
-type TextVariant =
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "body"
-  | "bodySmall"
-  | "caption"
-  | "overline";
+type TextVariant = "h1" | "h2" | "h3" | "h4" | "body" | "bodySmall" | "caption" | "overline";
 type TextColor =
   | "primary"
   | "secondary"
@@ -36,7 +28,7 @@ interface TextProps {
   variant?: TextVariant;
   color?: TextColor;
   weight?: TextWeight;
-  style?: TextStyle;
+  style?: StyleProp<TextStyle>;
   numberOfLines?: number;
   selectable?: boolean;
   onPress?: () => void;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useUnistyles, UnistylesRuntime } from "react-native-unistyles";
 import { preferences } from "@/shared/utils";
 
@@ -6,19 +6,25 @@ export type ThemeMode = "light" | "dark" | "system";
 
 export function useTheme() {
   const { theme, rt } = useUnistyles();
-  const [savedMode, setSavedMode] = useState<ThemeMode | null>(null);
+  const [callCount, setCallCount] = useState(0);
 
-  // Load saved theme preference on mount
-  useEffect(() => {
-    const saved = preferences.getTheme();
-    setSavedMode(saved);
+  const [savedMode, setSavedMode] = useState<ThemeMode | null>(() => {
+    // Leer tema guardado de forma síncrona al inicio
+    const mode = preferences.getTheme() as ThemeMode | null;
+    console.log('[DEBUG] useTheme: Initial savedMode (sync):', mode);
+    console.log('[DEBUG] useTheme: rt.themeName:', rt.themeName);
+    console.log('[DEBUG] useTheme: rt.hasAdaptiveThemes:', rt.hasAdaptiveThemes);
+    return mode;
+  });
 
-    // Apply saved preference if exists
-    if (saved && saved !== "system") {
-      UnistylesRuntime.setAdaptiveThemes(false);
-      UnistylesRuntime.setTheme(saved);
+  // Log cada vez que se renderiza el hook
+  setCallCount(prev => {
+    const newCount = prev + 1;
+    if (newCount <= 5) {
+      console.log(`[DEBUG] useTheme: Render #${newCount}, rt.themeName:`, rt.themeName, ', rt.hasAdaptiveThemes:', rt.hasAdaptiveThemes);
     }
-  }, []);
+    return newCount;
+  });
 
   /**
    * Get current theme mode

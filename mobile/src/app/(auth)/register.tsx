@@ -1,9 +1,10 @@
-import { View, Text, TextInput, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useForm, useAuth, GuestRoute } from '@/features/auth';
 import { registerSchema, type RegisterFormData } from '@/features/auth/schemas/auth.schema';
 import { Controller } from 'react-hook-form';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { ScreenWrapper, Text, TextInput, Button } from '@/shared/components/ui';
+import { StyleSheet } from 'react-native-unistyles';
 
 export default function RegisterScreen() {
   const { t } = useTranslation('auth');
@@ -29,169 +30,118 @@ export default function RegisterScreen() {
 
   return (
     <GuestRoute>
-      <View style={styles.container}>
-        <Text style={styles.title}>{t('register.title')}</Text>
-        <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
+      <ScreenWrapper centered={{ y: true }}>
+        <Text variant="h1" style={styles.title}>{t('register.title')}</Text>
+        <Text variant="body" color="secondary" style={styles.subtitle}>
+          {t('register.subtitle')}
+        </Text>
 
-        <View style={styles.row}>
-          <Controller
-            control={control}
-            name="firstName"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={[styles.input, styles.halfInput]}
-                placeholder={t('register.first_name_placeholder')}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholderTextColor="#999"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="lastName"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={[styles.input, styles.halfInput]}
-                placeholder={t('register.last_name_placeholder')}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholderTextColor="#999"
-              />
-            )}
-          />
-        </View>
+        <Controller
+          control={control}
+          name="firstName"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label={t('register.first_name_label')}
+              placeholder={t('register.first_name_placeholder')}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="lastName"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label={t('register.last_name_label')}
+              placeholder={t('register.last_name_placeholder')}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+            />
+          )}
+        />
 
         <Controller
           control={control}
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={[styles.input, errors.email && styles.inputError]}
+              label={t('labels.email')}
               placeholder={t('login.email_placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
               autoCapitalize="none"
               keyboardType="email-address"
-              placeholderTextColor="#999"
+              error={errors.email?.message}
             />
           )}
         />
-        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
         <Controller
           control={control}
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={[styles.input, errors.password && styles.inputError]}
+              label={t('labels.password')}
               placeholder={t('login.password_placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
               secureTextEntry
-              placeholderTextColor="#999"
+              error={errors.password?.message}
             />
           )}
         />
-        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
         {registerError && (
-          <Text style={styles.errorText}>{registerError.message}</Text>
-        )}
-
-        {isRegistering ? (
-          <ActivityIndicator size="large" color="#007AFF" />
-        ) : (
-          <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.buttonText}>{t('register.button')}</Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity
-          style={styles.linkButton}
-          onPress={() => router.replace('/(auth)/login' as const)}
-        >
-          <Text style={styles.linkText}>
-            {t('register.have_account')} <Text style={styles.linkTextBold}>{t('register.sign_in')}</Text>
+          <Text variant="caption" color="error" style={styles.errorText}>
+            {registerError.message}
           </Text>
-        </TouchableOpacity>
-      </View>
+        )}
+
+        <Button
+          title={t('register.button')}
+          onPress={handleSubmit(onSubmit)}
+          loading={isRegistering}
+          style={styles.button}
+        />
+
+        <Text variant="body" color="secondary" style={styles.linkText}>
+          {t('register.have_account')}{' '}
+          <Text
+            variant="body"
+            color="primary"
+            onPress={() => router.replace('/(auth)/login' as const)}
+          >
+            {t('register.sign_in')}
+          </Text>
+        </Text>
+      </ScreenWrapper>
     </GuestRoute>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: '#fff',
-  },
+const styles = StyleSheet.create((theme) => ({
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    textAlign: 'center',
-    color: '#1a1a1a',
+    marginBottom: theme.spacing(2),
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-    textAlign: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 4,
-    fontSize: 16,
-    backgroundColor: '#f8f8f8',
-  },
-  halfInput: {
-    flex: 1,
-  },
-  inputError: {
-    borderColor: '#ff3b30',
+    marginBottom: theme.spacing(8),
   },
   errorText: {
-    color: '#ff3b30',
-    marginBottom: 12,
-    marginLeft: 4,
-    fontSize: 14,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  linkButton: {
-    marginTop: 24,
-    padding: 8,
-  },
-  linkText: {
-    color: '#666',
-    fontSize: 14,
+    marginBottom: theme.spacing(3),
     textAlign: 'center',
   },
-  linkTextBold: {
-    color: '#007AFF',
-    fontWeight: '600',
+  button: {
+    marginTop: theme.spacing(6),
+    width: '100%',
   },
-});
+  linkText: {
+    marginTop: theme.spacing(6),
+    textAlign: 'center',
+  },
+}));

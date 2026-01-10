@@ -17,6 +17,7 @@ export const lightTheme = {
 
     // Brand
     primary: "#007AFF",
+    primaryForeground: "#FFFFFF",
     secondary: "#5856D6",
 
     // Semantic
@@ -108,6 +109,7 @@ export const darkTheme = {
 
     // Brand (adjusted for dark mode)
     primary: "#0A84FF",
+    primaryForeground: "#FFFFFF",
     secondary: "#5E5CE6",
 
     // Semantic (adjusted for dark mode)

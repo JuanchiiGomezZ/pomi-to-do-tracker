@@ -19,12 +19,10 @@ import {
 } from "@expo-google-fonts/poppins";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { useTheme } from "@shared/hooks";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  useTheme();
   const [fontsLoaded] = useFonts({
     "Poppins-Thin": Poppins_100Thin,
     "Poppins-ExtraLight": Poppins_200ExtraLight,

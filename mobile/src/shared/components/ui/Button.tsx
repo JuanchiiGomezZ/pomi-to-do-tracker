@@ -103,7 +103,7 @@ const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fontFamily.semibold,
   },
   text_primary: {
-    color: theme.colors.text.inverse,
+    color: theme.colors.primaryForeground,
   },
   text_secondary: {
     color: theme.colors.text.inverse,
